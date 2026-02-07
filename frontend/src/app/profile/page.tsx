@@ -1,6 +1,6 @@
 'use client';
 
-import { useBilling } from '@flowglad/nextjs';
+import { useAppBilling } from '@/contexts/AppBillingContext';
 
 const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
 
@@ -13,7 +13,7 @@ export default function ProfilePage() {
     billingPortalUrl,
     reload,
     errors,
-  } = useBilling();
+  } = useAppBilling();
 
   if (!DEMO_MODE && !loaded) {
     return (

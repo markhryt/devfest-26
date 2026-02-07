@@ -53,6 +53,45 @@ const DEFAULT_NODES: Node[] = [
 ];
 
 const DEFAULT_EDGES: Edge[] = [];
+
+/** Test workflow: Constant → Summarize Text. Use "Prepopulate" button to load this. */
+function getPrepopulateFlow(): { nodes: Node[]; edges: Edge[] } {
+  const constantBlock = getBlockById('constant');
+  const summarizeBlock = getBlockById('summarize-text');
+  const nodes: Node[] = [
+    {
+      id: 'prepop-constant',
+      type: 'block',
+      position: { x: 100, y: 150 },
+      data: {
+        blockId: 'constant',
+        label: constantBlock?.name ?? 'Constant',
+        icon: constantBlock?.icon ?? 'Type',
+      },
+    },
+    {
+      id: 'prepop-summarize',
+      type: 'block',
+      position: { x: 400, y: 150 },
+      data: {
+        blockId: 'summarize-text',
+        label: summarizeBlock?.name ?? 'Summarize Text',
+        icon: summarizeBlock?.icon ?? 'Brain',
+      },
+    },
+  ];
+  const edges: Edge[] = [
+    {
+      id: 'prepop-e1',
+      source: 'prepop-constant',
+      target: 'prepop-summarize',
+      sourceHandle: 'value',
+      targetHandle: 'text',
+    },
+  ];
+  return { nodes, edges };
+}
+
 const FLOW_STORAGE_KEY = 'devfest-flow';
 
 function loadFlow(): { nodes: Node[]; edges: Edge[] } {
@@ -309,6 +348,15 @@ export default function DashboardPage() {
     }
   }, [setNodes, setEdges]);
 
+  const handlePrepopulate = useCallback(() => {
+    const { nodes: prepNodes, edges: prepEdges } = getPrepopulateFlow();
+    setNodes(prepNodes);
+    setEdges(prepEdges);
+    setRunPanelNode(null);
+    setSelectedNodeIds([]);
+    clearRunCache();
+  }, [setNodes, setEdges, clearRunCache]);
+
   const handleRunSelected = useCallback(() => {
     if (selectedNodeIds.length !== 1) return;
     const node = nodes.find((n) => n.id === selectedNodeIds[0]);
@@ -535,6 +583,14 @@ export default function DashboardPage() {
           className="rounded-lg bg-zinc-700 px-3 py-1.5 text-sm font-medium text-zinc-200 hover:bg-zinc-600"
         >
           Clear canvas
+        </button>
+        <button
+          type="button"
+          onClick={handlePrepopulate}
+          className="rounded-lg bg-amber-600/80 px-3 py-1.5 text-sm font-medium text-zinc-100 hover:bg-amber-500/80"
+          title="Load a test workflow (Constant → Summarize Text) and clear run cache"
+        >
+          Prepopulate
         </button>
         <button
           type="button"

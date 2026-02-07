@@ -1,13 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { useBilling } from '@flowglad/nextjs';
+import { useAppBilling } from '@/contexts/AppBillingContext';
 import { BLOCK_DEFINITIONS } from 'shared';
 
 const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
 
 export default function CheckoutPage() {
-  const { createCheckoutSession, loaded, checkFeatureAccess } = useBilling();
+  const { createCheckoutSession, loaded, checkFeatureAccess } = useAppBilling();
 
   if (!DEMO_MODE && !loaded) {
     return (

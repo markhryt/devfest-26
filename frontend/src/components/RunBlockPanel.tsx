@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import { X, Play, Loader2, Lock, Link2 } from 'lucide-react';
 import { getBlockById, type BlockId } from 'shared';
-import { useBilling } from '@flowglad/nextjs';
+import { useAppBilling } from '@/contexts/AppBillingContext';
 import { useExecutionLog } from '@/store/executionLog';
 import { useFlowRunStore } from '@/store/flowRunStore';
 import { getInputSource } from '@/lib/workflowLogic';
@@ -28,7 +28,7 @@ export function RunBlockPanel({
   onClose: () => void;
 }) {
   const block = getBlockById(data.blockId as BlockId);
-  const { checkFeatureAccess, createCheckoutSession, loaded } = useBilling();
+  const { checkFeatureAccess, createCheckoutSession, loaded } = useAppBilling();
   const hasAccess = DEMO_MODE || (loaded && (checkFeatureAccess?.(block?.featureSlug ?? '') ?? false));
   const getOutput = useFlowRunStore((s) => s.getOutput);
   const setNodeOutput = useFlowRunStore((s) => s.setNodeOutput);

@@ -7,7 +7,8 @@
     "dev:frontend": "npm run dev -w frontend",
     "dev:backend": "npm run dev -w backend",
     "build": "npm run build -w shared && npm run build -w backend && npm run build -w frontend",
-    "install:all": "npm install && npm install -w frontend && npm install -w backend"
+    "install:all": "npm install && npm install -w frontend && npm install -w backend",
+    "kill-port-4000": "npx kill-port 4000"
   },
   "devDependencies": {
     "concurrently": "^9.1.0"

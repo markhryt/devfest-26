@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Brain, Mail, PenLine, TestTube, FileStack, Play, Layers, Type, GitBranch } from 'lucide-react';
-import { useBilling } from '@flowglad/nextjs';
+import { useAppBilling } from '@/contexts/AppBillingContext';
 import { BlockCard } from '@/components/BlockCard';
 
 const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
@@ -33,7 +33,7 @@ type Product = {
 };
 
 export default function BlockLibraryPage() {
-  const { checkFeatureAccess, loaded, createCheckoutSession } = useBilling();
+  const { checkFeatureAccess, loaded, createCheckoutSession } = useAppBilling();
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
