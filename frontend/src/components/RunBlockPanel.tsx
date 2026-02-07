@@ -128,8 +128,8 @@ export function RunBlockPanel({
                 const baseUrl = window.location.origin;
                 const session = await createCheckoutSession({
                   priceSlug: block.priceSlug,
-                  successUrl: `${baseUrl}/library?checkout=success`,
-                  cancelUrl: `${baseUrl}/dashboard`,
+                  successUrl: `${baseUrl}/marketplace?checkout=success`,
+                  cancelUrl: `${baseUrl}/lab`,
                 });
                 if (!session?.url) {
                   setError('Checkout URL missing from backend response');

@@ -18,14 +18,14 @@ export default function HomePage() {
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
             <Link
-              href="/library"
+              href="/marketplace"
               className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-blue-500"
             >
               Open Marketplace
               <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
-              href="/dashboard"
+              href="/lab"
               className="inline-flex items-center gap-2 rounded-lg border border-app px-4 py-2.5 text-sm font-medium text-app-fg transition hover:bg-app-surface"
             >
               Open Lab

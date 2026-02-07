@@ -168,7 +168,7 @@ export default function ProfilePage() {
             Open billing portal
           </a>
         )}
-        <Link href="/checkout" className="text-sm text-blue-300 hover:text-blue-200">
+        <Link href="/cart" className="text-sm text-blue-300 hover:text-blue-200">
           Go to Cart
         </Link>
       </div>

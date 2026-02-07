@@ -154,8 +154,8 @@ export default function LibraryPage() {
     const baseUrl = window.location.origin;
     const checkoutSession = await createCheckoutSession({
       priceSlug,
-      successUrl: `${baseUrl}/library?checkout=success`,
-      cancelUrl: `${baseUrl}/library?checkout=cancelled`,
+      successUrl: `${baseUrl}/marketplace?checkout=success`,
+      cancelUrl: `${baseUrl}/marketplace?checkout=cancelled`,
     });
 
     if (!checkoutSession?.url) {

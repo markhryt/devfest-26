@@ -6,9 +6,9 @@ import { FlaskConical, Store, ShoppingCart, User, MoonStar, Sun } from 'lucide-r
 import { useTheme } from '@/contexts/ThemeContext';
 
 const NAV = [
-  { href: '/library', label: 'Marketplace', icon: Store },
-  { href: '/dashboard', label: 'Lab', icon: FlaskConical },
-  { href: '/checkout', label: 'Cart', icon: ShoppingCart },
+  { href: '/marketplace', label: 'Marketplace', icon: Store },
+  { href: '/lab', label: 'Lab', icon: FlaskConical },
+  { href: '/cart', label: 'Cart', icon: ShoppingCart },
   { href: '/profile', label: 'Profile', icon: User },
 ] as const;
 

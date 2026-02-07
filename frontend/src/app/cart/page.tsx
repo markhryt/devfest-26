@@ -50,8 +50,8 @@ export default function CheckoutPage() {
       const baseUrl = window.location.origin;
       const session = await createCheckoutSession({
         priceSlug,
-        successUrl: `${baseUrl}/library?checkout=success`,
-        cancelUrl: `${baseUrl}/checkout?checkout=cancelled`,
+        successUrl: `${baseUrl}/marketplace?checkout=success`,
+        cancelUrl: `${baseUrl}/cart?checkout=cancelled`,
       });
 
       if (!session?.url) {
@@ -91,7 +91,7 @@ export default function CheckoutPage() {
         ) : lockedProducts.length === 0 ? (
           <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-5">
             <p className="text-sm text-emerald-300">All listed blocks are unlocked for this account.</p>
-            <Link href="/library" className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-emerald-200 hover:text-emerald-100">
+            <Link href="/marketplace" className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-emerald-200 hover:text-emerald-100">
               Return to Marketplace
               <ArrowRight className="h-4 w-4" />
             </Link>
