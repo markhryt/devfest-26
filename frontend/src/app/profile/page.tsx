@@ -169,7 +169,7 @@ export default function ProfilePage() {
           </a>
         )}
         <Link href="/checkout" className="text-sm text-blue-300 hover:text-blue-200">
-          Unlock more blocks
+          Go to Cart
         </Link>
       </div>
     </div>
