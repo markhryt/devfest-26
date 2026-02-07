@@ -657,6 +657,7 @@ export default function DashboardPage() {
                 setContextMenu={setContextMenu}
                 runPanelNode={runPanelNode}
                 setRunPanelNode={setRunPanelNode}
+                selectedNodeIds={selectedNodeIds}
                 setSelectedNodeIds={setSelectedNodeIds}
                 removeNodes={removeNodes}
                 onNodeDoubleClick={(e, node) => {
