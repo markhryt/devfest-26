@@ -302,9 +302,17 @@ function FlowCanvas({
 }
 
 export default function DashboardPage() {
-  const [initial] = useState(() => loadFlow());
-  const [nodes, setNodes, onNodesChange] = useNodesState(initial.nodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initial.edges);
+  const [nodes, setNodes, onNodesChange] = useNodesState(DEFAULT_NODES);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(DEFAULT_EDGES);
+  const [hydrated, setHydrated] = useState(false);
+
+  // Load from localStorage only after hydration to avoid mismatch
+  useEffect(() => {
+    const saved = loadFlow();
+    setNodes(saved.nodes);
+    setEdges(saved.edges);
+    setHydrated(true);
+  }, [setNodes, setEdges]);
   const [contextMenu, setContextMenu] = useState<ContextMenuState>(null);
   const [runPanelNode, setRunPanelNode] = useState<RunPanelState>(null);
   const [selectedNodeIds, setSelectedNodeIds] = useState<string[]>([]);
