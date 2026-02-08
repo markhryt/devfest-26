@@ -163,8 +163,8 @@ function FlowCanvas({
 }) {
   const { screenToFlowPosition } = useReactFlow();
   const isDark = theme === 'dark';
-  const majorGrid = isDark ? '#314053' : '#cbd5e1';
-  const minorGrid = isDark ? '#1d2838' : '#e2e8f0';
+  const majorGrid = isDark ? '#475569' : '#94a3b8';
+  const minorGrid = isDark ? '#334155' : '#b0bec5';
   const lineColor = isDark ? '#22c55e' : '#15803d';
 
   const onConnect = useCallback(
@@ -282,14 +282,15 @@ function FlowCanvas({
         onPaneClick={handlePaneClick}
         nodeTypes={nodeTypes}
         fitView
-        className="bg-app"
+        colorMode={isDark ? 'dark' : 'light'}
+        style={{ '--xy-background-color': `rgb(${isDark ? '2,6,23' : '248,250,252'})` } as React.CSSProperties}
         snapToGrid
         snapGrid={[16, 16]}
         defaultEdgeOptions={{ type: 'default' }}
         connectionLineStyle={{ stroke: lineColor, strokeWidth: 2 }}
       >
-        <Background color={minorGrid} gap={16} size={0.8} />
-        <Background color={majorGrid} gap={80} size={1.15} />
+        <Background color={minorGrid} gap={16} size={1.5} />
+        <Background color={majorGrid} gap={80} size={2} />
         <Controls className="!border-app !bg-app-surface !text-app-soft" />
         <MiniMap
           nodeColor={lineColor}
@@ -343,7 +344,7 @@ export default function DashboardPage() {
   const getOutput = useFlowRunStore((s) => s.getOutput);
   const clearRunCache = useFlowRunStore((s) => s.clearAll);
   const { isVisible, setVisible } = useExecutionLog();
-  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
 
   useEffect(() => {
     if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
@@ -702,7 +703,7 @@ export default function DashboardPage() {
                 selectedNodeIds={selectedNodeIds}
                 setSelectedNodeIds={setSelectedNodeIds}
                 removeNodes={removeNodes}
-                theme={theme}
+                theme={resolvedTheme}
                 onNodeDoubleClick={(e, node) => {
                   if (node.data) {
                     setRunPanelNode({
