@@ -6,6 +6,8 @@ import { useState } from 'react';
 import { FlaskConical, Store, ShoppingCart, User, MoonStar, Sun, LogOut } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { TokenBalance } from './TokenBalance';
+import { TokenPurchaseModal } from './TokenPurchaseModal';
 
 const NAV = [
   { href: '/marketplace', label: 'Marketplace', icon: Store },
@@ -18,6 +20,7 @@ export function AppHeader() {
   const pathname = usePathname();
   const { theme, toggleTheme } = useTheme();
   const { ready, user, isAuthenticated, signOut } = useAuth();
+  const [showPurchaseModal, setShowPurchaseModal] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
 
   const displayName =
@@ -36,78 +39,82 @@ export function AppHeader() {
   };
 
   return (
-    <header className="sticky top-0 z-20 shrink-0 border-b border-app bg-app-surface/85 backdrop-blur">
-      <div className="mx-auto flex w-full max-w-7xl items-center gap-4 px-4 py-3 md:px-6">
-        <Link href="/" className="text-base font-semibold tracking-tight text-app-fg md:text-lg">
-          Handi
-        </Link>
+    <>
+      <header className="sticky top-0 z-20 shrink-0 border-b border-app bg-app-surface/85 backdrop-blur">
+        <div className="mx-auto flex w-full max-w-7xl items-center gap-4 px-4 py-3 md:px-6">
+          <Link href="/" className="text-base font-semibold tracking-tight text-app-fg md:text-lg">
+            Handi
+          </Link>
 
-        <nav className="ml-2 flex items-center gap-1 overflow-x-auto">
-          {NAV.map(({ href, label, icon: Icon }) => {
-            const isActive = pathname === href || pathname.startsWith(`${href}/`);
-            return (
-              <Link
-                key={href}
-                href={href}
-                className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition ${
-                  isActive
-                    ? 'bg-app-accent/20 text-blue-300 dark:text-blue-200'
-                    : 'text-app-soft hover:bg-app-surface hover:text-app-fg'
-                }`}
-              >
-                <Icon className="h-4 w-4" />
-                {label}
-              </Link>
-            );
-          })}
-        </nav>
+          <nav className="ml-2 flex items-center gap-1 overflow-x-auto">
+            {NAV.map(({ href, label, icon: Icon }) => {
+              const isActive = pathname === href || pathname.startsWith(`${href}/`);
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition ${
+                    isActive
+                      ? 'bg-app-accent/20 text-blue-300 dark:text-blue-200'
+                      : 'text-app-soft hover:bg-app-surface hover:text-app-fg'
+                  }`}
+                >
+                  <Icon className="h-4 w-4" />
+                  {label}
+                </Link>
+              );
+            })}
+          </nav>
 
-        <div className="ml-auto flex items-center gap-2">
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className="inline-flex items-center gap-2 rounded-lg border border-app px-3 py-2 text-sm text-app-soft transition hover:bg-app-surface hover:text-app-fg"
-            aria-label="Toggle theme"
-            title="Toggle theme"
-          >
-            {theme === 'dark' ? <Sun className="h-4 w-4" /> : <MoonStar className="h-4 w-4" />}
-            <span className="hidden sm:inline">{theme === 'dark' ? 'Light' : 'Dark'}</span>
-          </button>
-          {!ready ? (
-            <span className="hidden rounded-lg border border-app px-3 py-2 text-xs text-app-soft md:inline">Auth...</span>
-          ) : isAuthenticated ? (
-            <>
-              <span className="hidden rounded-lg border border-app px-3 py-2 text-xs text-app-soft md:inline">
-                {displayName}
-              </span>
-              <button
-                type="button"
-                onClick={() => void handleSignOut()}
-                disabled={signingOut}
-                className="inline-flex items-center gap-2 rounded-lg border border-app px-3 py-2 text-sm text-app-soft transition hover:bg-app-surface hover:text-app-fg disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                <LogOut className="h-4 w-4" />
-                <span className="hidden sm:inline">{signingOut ? 'Signing out...' : 'Sign out'}</span>
-              </button>
-            </>
-          ) : (
-            <>
-              <Link
-                href="/login"
-                className="inline-flex items-center gap-2 rounded-lg border border-app px-3 py-2 text-sm text-app-soft transition hover:bg-app-surface hover:text-app-fg"
-              >
-                Sign in
-              </Link>
-              <Link
-                href="/signup"
-                className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-3 py-2 text-sm text-white transition hover:bg-blue-500"
-              >
-                Sign up
-              </Link>
-            </>
-          )}
+          <div className="ml-auto flex items-center gap-2">
+            <TokenBalance onClick={() => setShowPurchaseModal(true)} />
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="inline-flex items-center gap-2 rounded-lg border border-app px-3 py-2 text-sm text-app-soft transition hover:bg-app-surface hover:text-app-fg"
+              aria-label="Toggle theme"
+              title="Toggle theme"
+            >
+              {theme === 'dark' ? <Sun className="h-4 w-4" /> : <MoonStar className="h-4 w-4" />}
+              <span className="hidden sm:inline">{theme === 'dark' ? 'Light' : 'Dark'}</span>
+            </button>
+            {!ready ? (
+              <span className="hidden rounded-lg border border-app px-3 py-2 text-xs text-app-soft md:inline">Auth...</span>
+            ) : isAuthenticated ? (
+              <>
+                <span className="hidden rounded-lg border border-app px-3 py-2 text-xs text-app-soft md:inline">
+                  {displayName}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => void handleSignOut()}
+                  disabled={signingOut}
+                  className="inline-flex items-center gap-2 rounded-lg border border-app px-3 py-2 text-sm text-app-soft transition hover:bg-app-surface hover:text-app-fg disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span className="hidden sm:inline">{signingOut ? 'Signing out...' : 'Sign out'}</span>
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="inline-flex items-center gap-2 rounded-lg border border-app px-3 py-2 text-sm text-app-soft transition hover:bg-app-surface hover:text-app-fg"
+                >
+                  Sign in
+                </Link>
+                <Link
+                  href="/signup"
+                  className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-3 py-2 text-sm text-white transition hover:bg-blue-500"
+                >
+                  Sign up
+                </Link>
+              </>
+            )}
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+      <TokenPurchaseModal isOpen={showPurchaseModal} onClose={() => setShowPurchaseModal(false)} />
+    </>
   );
 }

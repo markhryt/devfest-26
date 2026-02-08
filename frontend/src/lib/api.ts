@@ -81,6 +81,12 @@ export type CheckoutResponse = {
 export type RunBlockResponse = {
   success: boolean;
   outputs: Record<string, unknown>;
+  error?: string;
+  needsPurchase?: boolean;
+  tokenCost?: number;
+  currentBalance?: number;
+  tokensUsed?: number;
+  tokensRemaining?: number;
 };
 
 export async function getProducts(): Promise<BlockDefinition[]> {

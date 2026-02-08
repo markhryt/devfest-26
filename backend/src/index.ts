@@ -11,6 +11,7 @@ import { webhookRouter } from './routes/webhook.js';
 import { authRouter } from './routes/auth.js';
 import { usersRouter } from './routes/users.js';
 import { workflowsRouter } from './routes/workflows.js';
+import { tokensRouter } from './routes/tokens.js';
 
 const app = express();
 const PORT = process.env.PORT ?? 4000;
@@ -82,6 +83,7 @@ app.use('/api/products', productsRouter);
 app.use('/api/entitlements', entitlementsRouter);
 app.use('/api/checkout', checkoutRouter);
 app.use('/api/webhook', webhookRouter);
+app.use('/api/tokens', tokensRouter);
 
 app.get('/health', (_req, res) => res.json({ ok: true }));
 
