@@ -3,12 +3,14 @@ import express from 'express';
 import cors from 'cors';
 import { expressRouter } from '@flowglad/server/express';
 import { flowglad } from './lib/flowglad.js';
-import { getCustomerExternalId } from './lib/auth.js';
 import { runBlockRouter } from './routes/run-block.js';
 import { productsRouter } from './routes/products.js';
 import { entitlementsRouter } from './routes/entitlements.js';
 import { checkoutRouter } from './routes/checkout.js';
 import { webhookRouter } from './routes/webhook.js';
+import { authRouter } from './routes/auth.js';
+import { usersRouter } from './routes/users.js';
+import { workflowsRouter } from './routes/workflows.js';
 
 const app = express();
 const PORT = process.env.PORT ?? 4000;
@@ -19,6 +21,8 @@ console.log('=== Backend Configuration ===');
 console.log('DEMO_MODE:', DEMO_MODE);
 console.log('FLOWGLAD_SECRET_KEY set:', !!process.env.FLOWGLAD_SECRET_KEY);
 console.log('FLOWGLAD_SECRET_KEY prefix:', process.env.FLOWGLAD_SECRET_KEY?.substring(0, 10) + '...');
+console.log('SUPABASE_URL set:', !!process.env.SUPABASE_URL);
+console.log('SUPABASE_SERVICE_ROLE_KEY set:', !!process.env.SUPABASE_SERVICE_ROLE_KEY);
 console.log('============================');
 
 app.use(cors({ origin: process.env.FRONTEND_URL ?? 'http://localhost:3000', credentials: true }));
@@ -30,6 +34,11 @@ app.use((req, res, next) => {
   next();
 });
 
+// Supabase routes (auth, users, workflows)
+app.use('/api/auth', authRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/workflows', workflowsRouter);
+
 // Flowglad: mount at /api/flowglad so frontend useBilling() can talk to it
 if (!DEMO_MODE) {
   console.log('[Setup] Mounting Flowglad expressRouter at /api/flowglad');
@@ -38,9 +47,18 @@ if (!DEMO_MODE) {
     expressRouter({
       flowglad,
       getCustomerExternalId: async (req) => {
-        const externalId = await getCustomerExternalId(req);
-        console.log(`[Flowglad] CustomerExternalId: ${externalId}`);
-        return externalId;
+        // Use Supabase user ID as customer external ID
+        const authHeader = req.headers.authorization;
+        if (authHeader?.startsWith('Bearer ')) {
+          const token = authHeader.substring(7);
+          const { supabase } = await import('./lib/supabase.js');
+          const { data: { user } } = await supabase.auth.getUser(token);
+          if (user) {
+            console.log(`[Flowglad] CustomerExternalId: ${user.id}`);
+            return user.id;
+          }
+        }
+        throw new Error('Unauthorized');
       },
     })
   );
