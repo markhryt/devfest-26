@@ -637,7 +637,7 @@ export default function DashboardPage() {
           <button
             type="button"
             onClick={handlePrepopulate}
-            className="rounded-lg border border-amber-500/35 bg-amber-500/10 px-3 py-2 text-sm font-medium text-amber-300 transition hover:bg-amber-500/20"
+            className="rounded-lg border border-amber-300 dark:border-amber-500/35 bg-amber-50 dark:bg-amber-500/10 px-3 py-2 text-sm font-medium text-amber-700 dark:text-amber-300 transition hover:bg-amber-100 dark:hover:bg-amber-500/20"
             title="Load Constant → Summarize test flow"
           >
             Prepopulate
@@ -646,7 +646,7 @@ export default function DashboardPage() {
             type="button"
             onClick={() => setVisible(!isVisible)}
             className={`inline-flex items-center gap-2 rounded-lg border border-app px-3 py-2 text-sm transition ${isVisible
-              ? 'bg-blue-600/15 text-blue-300'
+              ? 'bg-blue-100 dark:bg-blue-600/15 text-blue-700 dark:text-blue-300'
               : 'text-app-soft hover:bg-app-surface hover:text-app-fg'
               }`}
           >
@@ -688,7 +688,7 @@ export default function DashboardPage() {
           </span>
         </div>
         {workflowError && (
-          <p className="mt-3 rounded-lg border border-rose-500/30 bg-rose-500/10 px-3 py-2 text-sm text-rose-300">
+          <p className="mt-3 rounded-lg border border-rose-300 dark:border-rose-500/30 bg-rose-50 dark:bg-rose-500/10 px-3 py-2 text-sm text-rose-700 dark:text-rose-300">
             {workflowError}
           </p>
         )}

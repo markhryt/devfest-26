@@ -228,7 +228,7 @@ function MarketplaceContent() {
                       onClick={() => setStatusFilter(value)}
                       className={`rounded-full border px-3 py-1 text-xs transition ${
                         statusFilter === value
-                          ? 'border-blue-500/45 bg-blue-500/15 text-blue-300'
+                          ? 'border-blue-400 dark:border-blue-500/45 bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-300'
                           : 'border-app text-app-soft hover:text-app-fg'
                       }`}
                     >
@@ -246,7 +246,7 @@ function MarketplaceContent() {
                     onClick={() => setKindFilter('all')}
                     className={`rounded-full border px-3 py-1 text-xs transition ${
                       kindFilter === 'all'
-                        ? 'border-blue-500/45 bg-blue-500/15 text-blue-300'
+                        ? 'border-blue-400 dark:border-blue-500/45 bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-300'
                         : 'border-app text-app-soft hover:text-app-fg'
                     }`}
                   >
@@ -257,7 +257,7 @@ function MarketplaceContent() {
                     onClick={() => setKindFilter('ai')}
                     className={`inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs transition ${
                       kindFilter === 'ai'
-                        ? 'border-blue-500/45 bg-blue-500/15 text-blue-300'
+                        ? 'border-blue-400 dark:border-blue-500/45 bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-300'
                         : 'border-app text-app-soft hover:text-app-fg'
                     }`}
                   >
@@ -269,7 +269,7 @@ function MarketplaceContent() {
                     onClick={() => setKindFilter('utility')}
                     className={`inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs transition ${
                       kindFilter === 'utility'
-                        ? 'border-emerald-500/45 bg-emerald-500/15 text-emerald-300'
+                        ? 'border-emerald-400 dark:border-emerald-500/45 bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300'
                         : 'border-app text-app-soft hover:text-app-fg'
                     }`}
                   >
@@ -297,7 +297,7 @@ function MarketplaceContent() {
                       onClick={() => setBillingFilter(value)}
                       className={`block w-full rounded-lg border px-3 py-2 text-left text-xs transition ${
                         billingFilter === value
-                          ? 'border-blue-500/45 bg-blue-500/15 text-blue-300'
+                          ? 'border-blue-400 dark:border-blue-500/45 bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-300'
                           : 'border-app text-app-soft hover:text-app-fg'
                       }`}
                     >
@@ -350,7 +350,7 @@ function MarketplaceContent() {
           {loadingProducts ? (
             <div className="rounded-xl border border-app bg-app-surface p-6 text-sm text-app-soft">Loading products…</div>
           ) : pageError ? (
-            <div className="rounded-xl border border-rose-500/35 bg-rose-500/10 p-6 text-sm text-rose-300">{pageError}</div>
+            <div className="rounded-xl border border-rose-300 dark:border-rose-500/35 bg-rose-50 dark:bg-rose-500/10 p-6 text-sm text-rose-700 dark:text-rose-300">{pageError}</div>
           ) : filteredProducts.length === 0 ? (
             <div className="rounded-xl border border-app bg-app-surface p-6 text-sm text-app-soft">
               No blocks match your search and filters.

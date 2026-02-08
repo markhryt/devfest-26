@@ -67,8 +67,8 @@ export function TokenPurchaseModal({ isOpen, onClose }: TokenPurchaseModalProps)
             <div className="relative mx-4 w-full max-w-lg rounded-2xl border border-app bg-app-surface shadow-2xl">
                 <div className="flex items-center justify-between border-b border-app p-5">
                     <div className="flex items-center gap-3">
-                        <div className="rounded-lg bg-amber-500/20 p-2">
-                            <Coins className="h-5 w-5 text-amber-400" />
+                                        <div className="rounded-lg bg-amber-100 dark:bg-amber-500/20 p-2">
+                            <Coins className="h-5 w-5 text-amber-600 dark:text-amber-400" />
                         </div>
                         <h2 className="text-lg font-semibold text-app-fg">Buy Tokens</h2>
                     </div>
@@ -79,7 +79,7 @@ export function TokenPurchaseModal({ isOpen, onClose }: TokenPurchaseModalProps)
 
                 <div className="space-y-6 p-5">
                     {error && (
-                        <div className="rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-sm text-rose-300">
+                        <div className="rounded-lg border border-rose-300 dark:border-rose-500/30 bg-rose-50 dark:bg-rose-500/10 p-3 text-sm text-rose-700 dark:text-rose-300">
                             {error}
                         </div>
                     )}
@@ -95,16 +95,16 @@ export function TokenPurchaseModal({ isOpen, onClose }: TokenPurchaseModalProps)
                                     key={pack.id}
                                     onClick={() => handlePurchase(pack.priceSlug)}
                                     disabled={loading !== null}
-                                    className="flex items-center justify-between rounded-xl border border-app bg-app-card p-4 transition-all hover:border-amber-500/50 hover:bg-app-card/80 disabled:opacity-50"
+                                    className="flex items-center justify-between rounded-xl border border-app bg-app-card p-4 transition-all hover:border-amber-400 dark:hover:border-amber-500/50 hover:bg-app-card/80 disabled:opacity-50"
                                 >
                                     <div className="text-left">
                                         <div className="font-medium text-app-fg">{pack.name}</div>
-                                        <div className="text-sm text-amber-400">{pack.tokens.toLocaleString()} tokens</div>
+                                        <div className="text-sm text-amber-600 dark:text-amber-400">{pack.tokens.toLocaleString()} tokens</div>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <span className="text-lg font-bold text-app-fg">${pack.priceUsd}</span>
                                         {loading === pack.priceSlug && (
-                                            <Loader2 className="h-4 w-4 animate-spin text-amber-400" />
+                                            <Loader2 className="h-4 w-4 animate-spin text-amber-600 dark:text-amber-400" />
                                         )}
                                     </div>
                                 </button>
@@ -123,11 +123,11 @@ export function TokenPurchaseModal({ isOpen, onClose }: TokenPurchaseModalProps)
                                     key={sub.id}
                                     onClick={() => handlePurchase(sub.priceSlug)}
                                     disabled={loading !== null}
-                                    className="flex items-center justify-between rounded-xl border border-emerald-700/50 bg-gradient-to-r from-emerald-900/30 to-teal-900/30 p-4 transition-all hover:border-emerald-500/70 hover:from-emerald-900/50 hover:to-teal-900/50 disabled:opacity-50"
+                                    className="flex items-center justify-between rounded-xl border border-emerald-300 dark:border-emerald-700/50 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/30 dark:to-teal-900/30 p-4 transition-all hover:border-emerald-400 dark:hover:border-emerald-500/70 hover:from-emerald-100 hover:to-teal-100 dark:hover:from-emerald-900/50 dark:hover:to-teal-900/50 disabled:opacity-50"
                                 >
                                     <div className="text-left">
                                         <div className="font-medium text-app-fg">{sub.name}</div>
-                                        <div className="text-sm text-emerald-400">
+                                        <div className="text-sm text-emerald-600 dark:text-emerald-400">
                                             {sub.tokensPerPeriod.toLocaleString()} tokens/{sub.interval}
                                         </div>
                                     </div>
@@ -136,7 +136,7 @@ export function TokenPurchaseModal({ isOpen, onClose }: TokenPurchaseModalProps)
                                             ${sub.priceUsd}/{sub.interval === 'month' ? 'mo' : 'wk'}
                                         </span>
                                         {loading === sub.priceSlug && (
-                                            <Loader2 className="h-4 w-4 animate-spin text-emerald-400" />
+                                            <Loader2 className="h-4 w-4 animate-spin text-emerald-600 dark:text-emerald-400" />
                                         )}
                                     </div>
                                 </button>

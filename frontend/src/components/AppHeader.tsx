@@ -34,7 +34,7 @@ export function AppHeader() {
                   href={href}
                   className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition ${
                     isActive
-                      ? 'bg-app-accent/20 text-blue-300 dark:text-blue-200'
+                      ? 'bg-app-accent/20 text-blue-700 dark:text-blue-200'
                       : 'text-app-soft hover:bg-app-surface hover:text-app-fg'
                   }`}
                 >
