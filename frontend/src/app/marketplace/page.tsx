@@ -19,6 +19,9 @@ import {
   RefreshCw,
   Sparkles,
   Wrench,
+  ShoppingCart,
+  X,
+  ArrowRight,
 } from 'lucide-react';
 import { useAppBilling } from '@/contexts/AppBillingContext';
 import { BlockCard } from '@/components/BlockCard';
@@ -255,112 +258,174 @@ export default function LibraryPage() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-[260px_1fr]">
-        <aside className="h-fit rounded-2xl border border-app bg-app-surface/70 p-4">
-          <div className="mb-4 flex items-center justify-between">
-            <p className="inline-flex items-center gap-2 text-sm font-medium text-app-fg">
-              <Filter className="h-4 w-4" />
-              Filters
-            </p>
-            {activeFilterCount > 0 && (
-              <button
-                type="button"
-                onClick={resetFilters}
-                className="text-xs text-app-soft underline-offset-4 hover:text-app-fg hover:underline"
-              >
-                Reset
-              </button>
-            )}
+        <aside className="flex h-fit flex-col gap-4">
+          <div className="rounded-2xl border border-app bg-app-surface/70 p-4">
+            <div className="mb-4 flex items-center justify-between">
+              <p className="inline-flex items-center gap-2 text-sm font-medium text-app-fg">
+                <Filter className="h-4 w-4" />
+                Filters
+              </p>
+              {activeFilterCount > 0 && (
+                <button
+                  type="button"
+                  onClick={resetFilters}
+                  className="text-xs text-app-soft underline-offset-4 hover:text-app-fg hover:underline"
+                >
+                  Reset
+                </button>
+              )}
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <p className="mb-2 text-xs uppercase tracking-wide text-app-soft">Access</p>
+                <div className="flex flex-wrap gap-2">
+                  {(['all', 'unlocked', 'locked'] as const).map((value) => (
+                    <button
+                      key={value}
+                      type="button"
+                      onClick={() => setStatusFilter(value)}
+                      className={`rounded-full border px-3 py-1 text-xs transition ${
+                        statusFilter === value
+                          ? 'border-blue-500/45 bg-blue-500/15 text-blue-300'
+                          : 'border-app text-app-soft hover:text-app-fg'
+                      }`}
+                    >
+                      {value[0].toUpperCase() + value.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <p className="mb-2 text-xs uppercase tracking-wide text-app-soft">Type</p>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setKindFilter('all')}
+                    className={`rounded-full border px-3 py-1 text-xs transition ${
+                      kindFilter === 'all'
+                        ? 'border-blue-500/45 bg-blue-500/15 text-blue-300'
+                        : 'border-app text-app-soft hover:text-app-fg'
+                    }`}
+                  >
+                    All
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setKindFilter('ai')}
+                    className={`inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs transition ${
+                      kindFilter === 'ai'
+                        ? 'border-blue-500/45 bg-blue-500/15 text-blue-300'
+                        : 'border-app text-app-soft hover:text-app-fg'
+                    }`}
+                  >
+                    <Sparkles className="h-3 w-3" />
+                    AI
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setKindFilter('utility')}
+                    className={`inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs transition ${
+                      kindFilter === 'utility'
+                        ? 'border-emerald-500/45 bg-emerald-500/15 text-emerald-300'
+                        : 'border-app text-app-soft hover:text-app-fg'
+                    }`}
+                  >
+                    <Wrench className="h-3 w-3" />
+                    Utility
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <p className="mb-2 text-xs uppercase tracking-wide text-app-soft">Billing</p>
+                <div className="space-y-2">
+                  {(
+                    [
+                      ['all', 'All billing'],
+                      ['usage', 'Usage-based'],
+                      ['subscription', 'Subscription'],
+                      ['purchase', 'One-time purchase'],
+                      ['included', 'Included'],
+                    ] as const
+                  ).map(([value, label]) => (
+                    <button
+                      key={value}
+                      type="button"
+                      onClick={() => setBillingFilter(value)}
+                      className={`block w-full rounded-lg border px-3 py-2 text-left text-xs transition ${
+                        billingFilter === value
+                          ? 'border-blue-500/45 bg-blue-500/15 text-blue-300'
+                          : 'border-app text-app-soft hover:text-app-fg'
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="space-y-4">
-            <div>
-              <p className="mb-2 text-xs uppercase tracking-wide text-app-soft">Access</p>
-              <div className="flex flex-wrap gap-2">
-                {(['all', 'unlocked', 'locked'] as const).map((value) => (
-                  <button
-                    key={value}
-                    type="button"
-                    onClick={() => setStatusFilter(value)}
-                    className={`rounded-full border px-3 py-1 text-xs transition ${
-                      statusFilter === value
-                        ? 'border-blue-500/45 bg-blue-500/15 text-blue-300'
-                        : 'border-app text-app-soft hover:text-app-fg'
-                    }`}
-                  >
-                    {value[0].toUpperCase() + value.slice(1)}
-                  </button>
-                ))}
-              </div>
+          {/* Sidebar cart */}
+          <div className="rounded-2xl border border-app bg-app-surface/70 p-4">
+            <div className="mb-3 flex items-center justify-between">
+              <p className="inline-flex items-center gap-2 text-sm font-medium text-app-fg">
+                <ShoppingCart className="h-4 w-4" />
+                Cart
+                {cartBlockIds.length > 0 && (
+                  <span className="rounded-full bg-blue-500/20 px-1.5 py-0.5 text-[11px] font-semibold leading-none text-blue-300">
+                    {cartBlockIds.length}
+                  </span>
+                )}
+              </p>
+              {cartBlockIds.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => useCartStore.getState().clear()}
+                  className="text-xs text-app-soft underline-offset-4 hover:text-app-fg hover:underline"
+                >
+                  Clear
+                </button>
+              )}
             </div>
 
-            <div>
-              <p className="mb-2 text-xs uppercase tracking-wide text-app-soft">Type</p>
-              <div className="flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  onClick={() => setKindFilter('all')}
-                  className={`rounded-full border px-3 py-1 text-xs transition ${
-                    kindFilter === 'all'
-                      ? 'border-blue-500/45 bg-blue-500/15 text-blue-300'
-                      : 'border-app text-app-soft hover:text-app-fg'
-                  }`}
-                >
-                  All
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setKindFilter('ai')}
-                  className={`inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs transition ${
-                    kindFilter === 'ai'
-                      ? 'border-blue-500/45 bg-blue-500/15 text-blue-300'
-                      : 'border-app text-app-soft hover:text-app-fg'
-                  }`}
-                >
-                  <Sparkles className="h-3 w-3" />
-                  AI
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setKindFilter('utility')}
-                  className={`inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs transition ${
-                    kindFilter === 'utility'
-                      ? 'border-emerald-500/45 bg-emerald-500/15 text-emerald-300'
-                      : 'border-app text-app-soft hover:text-app-fg'
-                  }`}
-                >
-                  <Wrench className="h-3 w-3" />
-                  Utility
-                </button>
-              </div>
-            </div>
+            {cartBlockIds.length === 0 ? (
+              <p className="text-xs text-app-soft">No items in cart. Add locked blocks to purchase them together.</p>
+            ) : (
+              <>
+                <div className="space-y-1.5">
+                  {cartBlockIds.map((blockId) => {
+                    const product = products.find((p) => p.id === blockId);
+                    return (
+                      <div
+                        key={blockId}
+                        className="flex items-center justify-between gap-2 rounded-lg border border-app bg-app-card/60 px-2.5 py-2"
+                      >
+                        <span className="truncate text-xs text-app-fg">{product?.name ?? blockId}</span>
+                        <button
+                          type="button"
+                          onClick={() => removeBlockFromCart(blockId)}
+                          className="shrink-0 rounded p-0.5 text-app-soft transition hover:bg-app-surface hover:text-rose-400"
+                          aria-label={`Remove ${product?.name ?? blockId} from cart`}
+                        >
+                          <X className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
 
-            <div>
-              <p className="mb-2 text-xs uppercase tracking-wide text-app-soft">Billing</p>
-              <div className="space-y-2">
-                {(
-                  [
-                    ['all', 'All billing'],
-                    ['usage', 'Usage-based'],
-                    ['subscription', 'Subscription'],
-                    ['purchase', 'One-time purchase'],
-                    ['included', 'Included'],
-                  ] as const
-                ).map(([value, label]) => (
-                  <button
-                    key={value}
-                    type="button"
-                    onClick={() => setBillingFilter(value)}
-                    className={`block w-full rounded-lg border px-3 py-2 text-left text-xs transition ${
-                      billingFilter === value
-                        ? 'border-blue-500/45 bg-blue-500/15 text-blue-300'
-                        : 'border-app text-app-soft hover:text-app-fg'
-                    }`}
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
-            </div>
+                <Link
+                  href="/cart"
+                  className="mt-3 flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-blue-500"
+                >
+                  Checkout
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              </>
+            )}
           </div>
         </aside>
 
