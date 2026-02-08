@@ -22,6 +22,8 @@ export interface BlockDefinition {
   usageMeterSlug?: string;
   /** Whether block uses Claude/GPT (true) or backend-only (false) */
   usesAI: boolean;
+  /** Number of tokens consumed per run (0 for free utility blocks) */
+  tokenCost: number;
   inputs: { key: string; label: string; type: 'text' | 'file'; required?: boolean }[];
   outputs: { key: string; label: string }[];
 }
@@ -36,6 +38,7 @@ export const BLOCK_DEFINITIONS: BlockDefinition[] = [
     priceSlug: 'summarize_text',
     usageMeterSlug: undefined,
     usesAI: true,
+    tokenCost: 1,
     inputs: [{ key: 'text', label: 'Text to summarize', type: 'text', required: true }],
     outputs: [{ key: 'summary', label: 'Summary' }],
   },
@@ -48,6 +51,7 @@ export const BLOCK_DEFINITIONS: BlockDefinition[] = [
     priceSlug: 'extract_emails',
     usageMeterSlug: undefined,
     usesAI: true,
+    tokenCost: 1,
     inputs: [{ key: 'text', label: 'Text to scan', type: 'text', required: true }],
     outputs: [{ key: 'emails', label: 'Extracted emails' }],
   },
@@ -60,6 +64,7 @@ export const BLOCK_DEFINITIONS: BlockDefinition[] = [
     priceSlug: 'rewrite_prompt',
     usageMeterSlug: undefined,
     usesAI: true,
+    tokenCost: 1,
     inputs: [{ key: 'text', label: 'Input to rewrite', type: 'text', required: true }],
     outputs: [{ key: 'rewritten', label: 'Rewritten text' }],
   },
@@ -72,6 +77,7 @@ export const BLOCK_DEFINITIONS: BlockDefinition[] = [
     priceSlug: 'classify_input',
     usageMeterSlug: undefined,
     usesAI: true,
+    tokenCost: 1,
     inputs: [{ key: 'text', label: 'Text to classify', type: 'text', required: true }],
     outputs: [{ key: 'label', label: 'Sentiment' }, { key: 'confidence', label: 'Confidence' }],
   },
@@ -83,6 +89,7 @@ export const BLOCK_DEFINITIONS: BlockDefinition[] = [
     featureSlug: 'merge_pdfs',
     priceSlug: 'merge_pdfs',
     usesAI: false,
+    tokenCost: 1,
     inputs: [
       { key: 'files', label: 'PDF files', type: 'file', required: true },
     ],
@@ -97,6 +104,7 @@ export const BLOCK_DEFINITIONS: BlockDefinition[] = [
     featureSlug: 'free',
     priceSlug: 'free',
     usesAI: false,
+    tokenCost: 0,
     inputs: [],
     outputs: [{ key: 'trigger', label: 'Signal' }],
   },
@@ -108,6 +116,7 @@ export const BLOCK_DEFINITIONS: BlockDefinition[] = [
     featureSlug: 'free',
     priceSlug: 'free',
     usesAI: false,
+    tokenCost: 0,
     inputs: [
       { key: 'text1', label: 'First text', type: 'text', required: true },
       { key: 'text2', label: 'Second text', type: 'text', required: true },
@@ -123,6 +132,7 @@ export const BLOCK_DEFINITIONS: BlockDefinition[] = [
     featureSlug: 'free',
     priceSlug: 'free',
     usesAI: false,
+    tokenCost: 0,
     inputs: [{ key: 'value', label: 'Value', type: 'text', required: true }],
     outputs: [{ key: 'value', label: 'Value' }],
   },
@@ -134,6 +144,7 @@ export const BLOCK_DEFINITIONS: BlockDefinition[] = [
     featureSlug: 'free',
     priceSlug: 'free',
     usesAI: false,
+    tokenCost: 0,
     inputs: [
       { key: 'text', label: 'Text to check', type: 'text', required: true },
       { key: 'pattern', label: 'Contains (optional)', type: 'text', required: false },
