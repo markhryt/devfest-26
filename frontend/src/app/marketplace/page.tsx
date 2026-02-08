@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -41,7 +42,7 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   GitBranch,
 };
 
-export default function LibraryPage() {
+function MarketplaceContent() {
   const searchParams = useSearchParams();
   const checkoutStatus = searchParams.get('checkout');
   const { hasFeatureAccess, entitlementsLoading, refreshEntitlements, entitlementsError } = useAppBilling();
@@ -498,5 +499,13 @@ export default function LibraryPage() {
         </section>
       </div>
     </div>
+  );
+}
+
+export default function LibraryPage() {
+  return (
+    <Suspense fallback={<div className="mx-auto w-full max-w-7xl px-4 py-6 text-sm text-app-soft md:px-6 md:py-8">Loading marketplace...</div>}>
+      <MarketplaceContent />
+    </Suspense>
   );
 }
