@@ -3,22 +3,20 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { FlaskConical, Store, ShoppingCart, User, MoonStar, Sun } from 'lucide-react';
-import { useTheme } from '@/contexts/ThemeContext';
+import { FlaskConical, Store, ShoppingCart } from 'lucide-react';
 import { useCartStore } from '@/store/cartStore';
 import { TokenBalance } from './TokenBalance';
 import { TokenPurchaseModal } from './TokenPurchaseModal';
+import { UserDropdown } from './UserDropdown';
 
 const NAV = [
   { href: '/marketplace', label: 'Marketplace', icon: Store },
   { href: '/lab', label: 'Lab', icon: FlaskConical },
   { href: '/cart', label: 'Cart', icon: ShoppingCart },
-  { href: '/profile', label: 'Profile', icon: User },
 ] as const;
 
 export function AppHeader() {
   const pathname = usePathname();
-  const { theme, toggleTheme } = useTheme();
   const cartCount = useCartStore((state) => state.blockIds.length);
   const [showPurchaseModal, setShowPurchaseModal] = useState(false);
 
@@ -57,19 +55,7 @@ export function AppHeader() {
 
           <div className="ml-auto flex items-center gap-3">
             <TokenBalance onClick={() => setShowPurchaseModal(true)} />
-            <button
-              type="button"
-              onClick={toggleTheme}
-              className="inline-flex items-center gap-2 rounded-lg border border-app px-3 py-2 text-sm text-app-soft transition hover:bg-app-surface hover:text-app-fg"
-              aria-label="Toggle theme"
-              title="Toggle theme"
-            >
-              {theme === 'dark' ? <Sun className="h-4 w-4" /> : <MoonStar className="h-4 w-4" />}
-              <span className="hidden sm:inline">{theme === 'dark' ? 'Light' : 'Dark'}</span>
-            </button>
-            <span className="hidden rounded-lg border border-app px-3 py-2 text-xs text-app-soft md:inline">
-              demo-user-1
-            </span>
+            <UserDropdown />
           </div>
         </div>
       </header>
