@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { Manrope, IBM_Plex_Mono } from 'next/font/google';
 import { AppBillingRoot } from '@/contexts/AppBillingContext';
-import { ThemeProvider } from '@/contexts/ThemeContext';
 import { TokenProvider } from '@/contexts/TokenContext';
+import { ThemeProvider } from '@/contexts/ThemeContext';
 import { AppHeader } from '@/components/AppHeader';
 import './globals.css';
 

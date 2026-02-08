@@ -1,3 +1,5 @@
+// In-memory token balance store (demo purposes - use database in production)
+
 interface UserTokenData {
     balance: number;
     lastRefresh: Date;
@@ -7,11 +9,13 @@ interface UserTokenData {
 
 const tokenStore = new Map<string, UserTokenData>();
 
+// Default starting balance for new users
 const DEFAULT_BALANCE = 10;
 
 export function getTokenBalance(userId: string): number {
     const data = tokenStore.get(userId);
     if (!data) {
+        // Initialize new user with starting balance
         tokenStore.set(userId, {
             balance: DEFAULT_BALANCE,
             lastRefresh: new Date(),

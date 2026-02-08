@@ -8,6 +8,7 @@ export const tokensRouter = Router();
 
 const DEMO_MODE = process.env.DEMO_MODE === 'true';
 
+// GET /api/tokens - Get user's token balance
 tokensRouter.get('/', async (req, res) => {
     try {
         const userId = await getCustomerExternalId(req);
@@ -26,6 +27,7 @@ tokensRouter.get('/', async (req, res) => {
     }
 });
 
+// GET /api/tokens/products - Get available token packs and subscriptions
 tokensRouter.get('/products', async (_req, res) => {
     res.json({
         packs: TOKEN_PACKS,
@@ -33,6 +35,7 @@ tokensRouter.get('/products', async (_req, res) => {
     });
 });
 
+// POST /api/tokens/purchase - Create checkout for token pack or subscription
 tokensRouter.post('/purchase', async (req, res) => {
     try {
         const userId = await getCustomerExternalId(req);
@@ -46,12 +49,14 @@ tokensRouter.post('/purchase', async (req, res) => {
             return res.status(400).json({ error: 'priceSlug, successUrl, cancelUrl required' });
         }
 
+        // Verify this is a valid token product
         const product = getTokenProductByPriceSlug(priceSlug);
         if (!product) {
             return res.status(400).json({ error: 'Invalid token product' });
         }
 
         if (DEMO_MODE) {
+            // In demo mode, credit tokens directly without checkout
             const tokens = product.type === 'one_time' ? product.tokens : product.tokensPerPeriod;
             creditTokens(userId, tokens, `demo purchase: ${priceSlug}`);
             return res.json({
@@ -61,6 +66,7 @@ tokensRouter.post('/purchase', async (req, res) => {
             });
         }
 
+        // Create Flowglad checkout
         const fgClient = flowglad(userId);
         await fgClient.findOrCreateCustomer();
         const result = await fgClient.createCheckoutSession({
@@ -76,6 +82,7 @@ tokensRouter.post('/purchase', async (req, res) => {
     }
 });
 
+// POST /api/tokens/credit - Manually credit tokens (for testing/admin)
 tokensRouter.post('/credit', async (req, res) => {
     try {
         const userId = await getCustomerExternalId(req);

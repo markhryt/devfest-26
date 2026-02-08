@@ -1,8 +1,24 @@
 import { Router } from 'express';
 import { flowglad } from '../lib/flowglad.js';
 import { getCustomerExternalId } from '../lib/auth.js';
+import { BLOCK_DEFINITIONS } from 'shared';
 
 export const checkoutRouter = Router();
+
+const DEMO_MODE = process.env.DEMO_MODE === 'true';
+
+const demoEntitlements = new Map<string, Set<string>>();
+
+export function getDemoEntitlements(userId: string): Set<string> {
+  if (!demoEntitlements.has(userId)) {
+    demoEntitlements.set(userId, new Set());
+  }
+  return demoEntitlements.get(userId)!;
+}
+
+export function grantDemoEntitlement(userId: string, featureSlug: string): void {
+  getDemoEntitlements(userId).add(featureSlug);
+}
 
 checkoutRouter.post('/', async (req, res) => {
   try {
@@ -24,6 +40,23 @@ checkoutRouter.post('/', async (req, res) => {
 
     if (!candidates.length || !successUrl || !cancelUrl) {
       return res.status(400).json({ error: 'priceSlug (or priceSlugs), successUrl, cancelUrl required' });
+    }
+
+    if (DEMO_MODE) {
+      for (const candidate of candidates) {
+        const block = BLOCK_DEFINITIONS.find((b) => b.priceSlug === candidate);
+        if (block) {
+          grantDemoEntitlement(userId, block.featureSlug);
+        }
+      }
+
+      return res.json({
+        checkoutSession: {
+          id: `demo_session_${Date.now()}`,
+          url: successUrl,
+        },
+        demoMode: true,
+      });
     }
 
     const fgClient = flowglad(userId);
