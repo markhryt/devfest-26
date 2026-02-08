@@ -17,7 +17,6 @@ import {
   Type,
   GitBranch,
   Search,
-  RefreshCw,
   Sparkles,
   Wrench,
   ShoppingCart,
@@ -147,14 +146,6 @@ function MarketplaceContent() {
       .map(({ product }) => product);
   }, [search, productsWithMeta, statusFilter, kindFilter, billingFilter, sortBy]);
 
-  const stats = useMemo(() => {
-    const total = productsWithMeta.length;
-    const unlocked = productsWithMeta.filter(({ hasAccess }) => hasAccess).length;
-    const aiCount = productsWithMeta.filter(({ product }) => product.usesAI).length;
-    const subscriptionCount = productsWithMeta.filter(({ billingType }) => billingType === 'subscription').length;
-    return { total, unlocked, aiCount, subscriptionCount };
-  }, [productsWithMeta]);
-
   const activeFilterCount = useMemo(() => {
     let count = 0;
     if (statusFilter !== 'all') count += 1;
@@ -188,40 +179,11 @@ function MarketplaceContent() {
   return (
     <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 py-6 md:px-6 md:py-8">
       <div className="mb-5 rounded-2xl border border-app bg-app-surface/75 p-4 md:p-5">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-app-fg">Marketplace</h1>
-            <p className="mt-1 text-sm text-app-soft">
-              Discover blocks, apply filters quickly, and unlock tools via checkout only when needed.
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={() => void refreshEntitlements()}
-            className="inline-flex items-center gap-2 rounded-lg border border-app px-3 py-2 text-sm text-app-soft transition hover:bg-app-surface hover:text-app-fg"
-          >
-            <RefreshCw className="h-4 w-4" />
-            Refresh access
-          </button>
-        </div>
-
-        <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="rounded-xl border border-app bg-app-card/70 px-3 py-2">
-            <p className="text-xs text-app-soft">Total blocks</p>
-            <p className="mt-1 text-lg font-semibold text-app-fg">{stats.total}</p>
-          </div>
-          <div className="rounded-xl border border-app bg-app-card/70 px-3 py-2">
-            <p className="text-xs text-app-soft">Unlocked</p>
-            <p className="mt-1 text-lg font-semibold text-emerald-300">{stats.unlocked}</p>
-          </div>
-          <div className="rounded-xl border border-app bg-app-card/70 px-3 py-2">
-            <p className="text-xs text-app-soft">AI blocks</p>
-            <p className="mt-1 text-lg font-semibold text-blue-300">{stats.aiCount}</p>
-          </div>
-          <div className="rounded-xl border border-app bg-app-card/70 px-3 py-2">
-            <p className="text-xs text-app-soft">Subscriptions</p>
-            <p className="mt-1 text-lg font-semibold text-amber-300">{stats.subscriptionCount}</p>
-          </div>
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight text-app-fg">Marketplace</h1>
+          <p className="mt-1 text-sm text-app-soft">
+            Discover blocks, apply filters quickly, and unlock tools via checkout only when needed.
+          </p>
         </div>
       </div>
 
