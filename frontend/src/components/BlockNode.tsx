@@ -51,8 +51,8 @@ function BlockNodeComponent({
 
   return (
     <div
-      className={`min-w-[220px] overflow-hidden rounded-2xl border bg-app-surface shadow-lg backdrop-blur ${
-        selected ? 'border-blue-500 ring-2 ring-blue-500/35' : 'border-app'
+      className={`min-w-[220px] overflow-hidden rounded-2xl border bg-app-surface shadow-lg backdrop-blur transition ${
+        selected ? 'border-blue-500 ring-2 ring-blue-500/35' : 'border-app hover:border-blue-500/45'
       }`}
     >
       {/* Header */}
@@ -82,7 +82,7 @@ function BlockNodeComponent({
               type="target"
               position={Position.Left}
               id={input.key}
-              className="!-left-1.5 !h-2.5 !w-2.5 !border-2 !border-slate-900 !bg-amber-400"
+              className="!-left-1.5 !h-2.5 !w-2.5 !border-2 !border-[rgb(var(--app-bg))] !bg-amber-400"
             />
             <span className="flex-1 truncate text-xs text-app-soft" title={`${input.label} (${input.type})`}>
               {input.label} <span className="text-[11px] text-app-soft">({input.type})</span>
@@ -107,7 +107,7 @@ function BlockNodeComponent({
               type="source"
               position={Position.Right}
               id={output.key}
-              className="!-right-1.5 !h-2.5 !w-2.5 !border-2 !border-slate-900 !bg-emerald-500"
+              className="!-right-1.5 !h-2.5 !w-2.5 !border-2 !border-[rgb(var(--app-bg))] !bg-emerald-500"
             />
           </div>
         ))}
