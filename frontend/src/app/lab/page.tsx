@@ -576,163 +576,163 @@ export default function DashboardPage() {
     <RequireAuth>
       <div className="mx-auto flex w-full max-w-7xl flex-1 min-h-0 flex-col px-4 py-6 md:px-6 md:py-8">
         <div className="mb-5 rounded-2xl border border-app bg-app-surface/75 p-4 md:p-5">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-app-fg">Lab</h1>
-            <p className="mt-1 text-sm text-app-soft">
-              Build block-based workflows, run them end-to-end, and inspect outputs as you iterate.
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <h1 className="text-2xl font-semibold tracking-tight text-app-fg">Lab</h1>
+              <p className="mt-1 text-sm text-app-soft">
+                Build block-based workflows, run them end-to-end, and inspect outputs as you iterate.
+              </p>
+            </div>
+            <Link
+              href="/"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-app px-3 py-2 text-sm text-app-soft transition hover:bg-app-surface hover:text-app-fg"
+            >
+              <Home className="h-4 w-4" />
+              Home
+            </Link>
+          </div>
+
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={handleRunWorkflow}
+              disabled={nodes.length === 0 || workflowRunning}
+              className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              <Play className="h-4 w-4" />
+              {workflowRunning ? 'Running…' : 'Run workflow'}
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowCreateProductModal(true)}
+              className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-blue-500"
+            >
+              <PackagePlus className="h-4 w-4" />
+              Create Agent
+            </button>
+            <button
+              type="button"
+              onClick={handleRunSelected}
+              disabled={selectedNodeIds.length !== 1}
+              className="inline-flex items-center gap-2 rounded-lg border border-app px-3 py-2 text-sm text-app-soft transition hover:bg-app-surface hover:text-app-fg disabled:opacity-40"
+            >
+              <WandSparkles className="h-4 w-4" />
+              Run selected
+            </button>
+            <button
+              type="button"
+              onClick={handleAutoLayout}
+              disabled={nodes.length === 0}
+              className="inline-flex items-center gap-2 rounded-lg border border-app px-3 py-2 text-sm text-app-soft transition hover:bg-app-surface hover:text-app-fg disabled:opacity-40"
+            >
+              <LayoutGrid className="h-4 w-4" />
+              Auto-layout
+            </button>
+            <button
+              type="button"
+              onClick={handlePrepopulate}
+              className="rounded-lg border border-amber-300 dark:border-amber-500/35 bg-amber-50 dark:bg-amber-500/10 px-3 py-2 text-sm font-medium text-amber-700 dark:text-amber-300 transition hover:bg-amber-100 dark:hover:bg-amber-500/20"
+              title="Load Constant → Summarize test flow"
+            >
+              Prepopulate
+            </button>
+            <button
+              type="button"
+              onClick={() => setVisible(!isVisible)}
+              className={`inline-flex items-center gap-2 rounded-lg border border-app px-3 py-2 text-sm transition ${isVisible
+                ? 'bg-blue-100 dark:bg-blue-600/15 text-blue-700 dark:text-blue-300'
+                : 'text-app-soft hover:bg-app-surface hover:text-app-fg'
+                }`}
+            >
+              <ScrollText className="h-4 w-4" />
+              Logs
+            </button>
+            <button
+              type="button"
+              onClick={handleImport}
+              className="rounded-lg border border-app px-3 py-2 text-sm text-app-soft transition hover:bg-app-surface hover:text-app-fg"
+            >
+              Import
+            </button>
+            <button
+              type="button"
+              onClick={handleExport}
+              className="rounded-lg border border-app px-3 py-2 text-sm text-app-soft transition hover:bg-app-surface hover:text-app-fg"
+            >
+              Export
+            </button>
+            <button
+              type="button"
+              onClick={clearRunCache}
+              className="rounded-lg border border-app px-3 py-2 text-sm text-app-soft transition hover:bg-app-surface hover:text-app-fg"
+              title="Clear cached outputs"
+            >
+              Clear cache
+            </button>
+            <button
+              type="button"
+              onClick={handleClearCanvas}
+              className="inline-flex items-center gap-2 rounded-lg border border-app px-3 py-2 text-sm text-app-soft transition hover:bg-app-surface hover:text-rose-300"
+            >
+              <Trash2 className="h-4 w-4" />
+              Clear canvas
+            </button>
+            <span className="ml-auto rounded-full border border-app px-2.5 py-1 text-xs text-app-soft">
+              {nodes.length} block{nodes.length !== 1 ? 's' : ''}
+            </span>
+          </div>
+          {workflowError && (
+            <p className="mt-3 rounded-lg border border-rose-300 dark:border-rose-500/30 bg-rose-50 dark:bg-rose-500/10 px-3 py-2 text-sm text-rose-700 dark:text-rose-300">
+              {workflowError}
             </p>
-          </div>
-          <Link
-            href="/"
-            className="inline-flex items-center gap-1.5 rounded-lg border border-app px-3 py-2 text-sm text-app-soft transition hover:bg-app-surface hover:text-app-fg"
-          >
-            <Home className="h-4 w-4" />
-            Home
-          </Link>
-        </div>
-
-        <div className="mt-4 flex flex-wrap items-center gap-2">
-          <button
-            type="button"
-            onClick={handleRunWorkflow}
-            disabled={nodes.length === 0 || workflowRunning}
-            className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            <Play className="h-4 w-4" />
-            {workflowRunning ? 'Running…' : 'Run workflow'}
-          </button>
-          <button
-            type="button"
-            onClick={() => setShowCreateProductModal(true)}
-            className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-blue-500"
-          >
-            <PackagePlus className="h-4 w-4" />
-            Create Agent
-          </button>
-          <button
-            type="button"
-            onClick={handleRunSelected}
-            disabled={selectedNodeIds.length !== 1}
-            className="inline-flex items-center gap-2 rounded-lg border border-app px-3 py-2 text-sm text-app-soft transition hover:bg-app-surface hover:text-app-fg disabled:opacity-40"
-          >
-            <WandSparkles className="h-4 w-4" />
-            Run selected
-          </button>
-          <button
-            type="button"
-            onClick={handleAutoLayout}
-            disabled={nodes.length === 0}
-            className="inline-flex items-center gap-2 rounded-lg border border-app px-3 py-2 text-sm text-app-soft transition hover:bg-app-surface hover:text-app-fg disabled:opacity-40"
-          >
-            <LayoutGrid className="h-4 w-4" />
-            Auto-layout
-          </button>
-          <button
-            type="button"
-            onClick={handlePrepopulate}
-            className="rounded-lg border border-amber-300 dark:border-amber-500/35 bg-amber-50 dark:bg-amber-500/10 px-3 py-2 text-sm font-medium text-amber-700 dark:text-amber-300 transition hover:bg-amber-100 dark:hover:bg-amber-500/20"
-            title="Load Constant → Summarize test flow"
-          >
-            Prepopulate
-          </button>
-          <button
-            type="button"
-            onClick={() => setVisible(!isVisible)}
-            className={`inline-flex items-center gap-2 rounded-lg border border-app px-3 py-2 text-sm transition ${isVisible
-              ? 'bg-blue-100 dark:bg-blue-600/15 text-blue-700 dark:text-blue-300'
-              : 'text-app-soft hover:bg-app-surface hover:text-app-fg'
-              }`}
-          >
-            <ScrollText className="h-4 w-4" />
-            Logs
-          </button>
-          <button
-            type="button"
-            onClick={handleImport}
-            className="rounded-lg border border-app px-3 py-2 text-sm text-app-soft transition hover:bg-app-surface hover:text-app-fg"
-          >
-            Import
-          </button>
-          <button
-            type="button"
-            onClick={handleExport}
-            className="rounded-lg border border-app px-3 py-2 text-sm text-app-soft transition hover:bg-app-surface hover:text-app-fg"
-          >
-            Export
-          </button>
-          <button
-            type="button"
-            onClick={clearRunCache}
-            className="rounded-lg border border-app px-3 py-2 text-sm text-app-soft transition hover:bg-app-surface hover:text-app-fg"
-            title="Clear cached outputs"
-          >
-            Clear cache
-          </button>
-          <button
-            type="button"
-            onClick={handleClearCanvas}
-            className="inline-flex items-center gap-2 rounded-lg border border-app px-3 py-2 text-sm text-app-soft transition hover:bg-app-surface hover:text-rose-300"
-          >
-            <Trash2 className="h-4 w-4" />
-            Clear canvas
-          </button>
-          <span className="ml-auto rounded-full border border-app px-2.5 py-1 text-xs text-app-soft">
-            {nodes.length} block{nodes.length !== 1 ? 's' : ''}
-          </span>
-        </div>
-        {workflowError && (
-          <p className="mt-3 rounded-lg border border-rose-300 dark:border-rose-500/30 bg-rose-50 dark:bg-rose-500/10 px-3 py-2 text-sm text-rose-700 dark:text-rose-300">
-            {workflowError}
-          </p>
-        )}
-      </div>
-
-      <div className="grid min-h-0 flex-1 gap-4 lg:grid-cols-[260px_1fr]">
-        <BlockPalette onAddBlock={addBlockAt} />
-        <div className="flex min-h-0 overflow-hidden rounded-2xl border border-app bg-app-surface/70">
-          <div className="min-h-0 flex-1">
-            <ReactFlowProvider>
-              <FlowCanvas
-                nodes={nodes}
-                setNodes={setNodes}
-                onNodesChange={onNodesChange}
-                edges={edges}
-                setEdges={setEdges}
-                onEdgesChange={onEdgesChange}
-                contextMenu={contextMenu}
-                setContextMenu={setContextMenu}
-                runPanelNode={runPanelNode}
-                setRunPanelNode={setRunPanelNode}
-                selectedNodeIds={selectedNodeIds}
-                setSelectedNodeIds={setSelectedNodeIds}
-                removeNodes={removeNodes}
-                theme={resolvedTheme}
-                onNodeDoubleClick={(e, node) => {
-                  if (node.data) {
-                    setRunPanelNode({
-                      id: node.id,
-                      data: {
-                        blockId: String(node.data.blockId),
-                        label: String(node.data.label),
-                        icon: node.data.icon,
-                      },
-                    });
-                  }
-                }}
-              />
-            </ReactFlowProvider>
-          </div>
-          {runPanelNode && (
-            <RunBlockPanel
-              nodeId={runPanelNode.id}
-              data={runPanelNode.data}
-              nodes={nodes}
-              edges={edges}
-              onClose={() => setRunPanelNode(null)}
-            />
           )}
         </div>
+
+        <div className="grid min-h-0 flex-1 gap-4 lg:grid-cols-[260px_1fr]">
+          <BlockPalette onAddBlock={addBlockAt} />
+          <div className="flex min-h-0 overflow-hidden rounded-2xl border border-app bg-app-surface/70">
+            <div className="min-h-0 flex-1">
+              <ReactFlowProvider>
+                <FlowCanvas
+                  nodes={nodes}
+                  setNodes={setNodes}
+                  onNodesChange={onNodesChange}
+                  edges={edges}
+                  setEdges={setEdges}
+                  onEdgesChange={onEdgesChange}
+                  contextMenu={contextMenu}
+                  setContextMenu={setContextMenu}
+                  runPanelNode={runPanelNode}
+                  setRunPanelNode={setRunPanelNode}
+                  selectedNodeIds={selectedNodeIds}
+                  setSelectedNodeIds={setSelectedNodeIds}
+                  removeNodes={removeNodes}
+                  theme={resolvedTheme}
+                  onNodeDoubleClick={(e, node) => {
+                    if (node.data) {
+                      setRunPanelNode({
+                        id: node.id,
+                        data: {
+                          blockId: String(node.data.blockId),
+                          label: String(node.data.label),
+                          icon: node.data.icon,
+                        },
+                      });
+                    }
+                  }}
+                />
+              </ReactFlowProvider>
+            </div>
+            {runPanelNode && (
+              <RunBlockPanel
+                nodeId={runPanelNode.id}
+                data={runPanelNode.data}
+                nodes={nodes}
+                edges={edges}
+                onClose={() => setRunPanelNode(null)}
+              />
+            )}
+          </div>
         </div>
         <input
           ref={fileInputRef}
@@ -751,10 +751,12 @@ export default function DashboardPage() {
         )}
         {showCreateProductModal && (
           <CreateProductModal
+            nodes={nodes}
+            edges={edges}
             onClose={() => setShowCreateProductModal(false)}
-            onSuccess={(product) => {
+            onSuccess={(workflow) => {
               setShowCreateProductModal(false);
-              window.alert(`Agent "${product.name}" created successfully! Check the Marketplace.`);
+              window.alert(`Agent "${workflow.name}" created successfully!`);
             }}
           />
         )}
