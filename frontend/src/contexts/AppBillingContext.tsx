@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-import { DEMO_MODE, createCheckoutSession as apiCreateCheckoutSession, getEntitlementsData } from '@/lib/api';
+import { createCheckoutSession as apiCreateCheckoutSession, getEntitlementsData } from '@/lib/api';
 
 export type AppBillingValue = {
   loaded: boolean;

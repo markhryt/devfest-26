@@ -7,16 +7,23 @@ export const checkoutRouter = Router();
 checkoutRouter.post('/', async (req, res) => {
   try {
     const userId = await getCustomerExternalId(req);
-    const { priceSlug, successUrl, cancelUrl } = req.body as {
+    const { priceSlug, priceSlugs, successUrl, cancelUrl, outputName, outputMetadata } = req.body as {
       priceSlug: string;
+      priceSlugs?: string[];
       successUrl: string;
       cancelUrl: string;
+      outputName?: string;
+      outputMetadata?: Record<string, string | number | boolean>;
     };
 
-    console.log(`[Checkout] Request for customer: ${userId}, price: ${priceSlug}`);
+    const candidates = [priceSlug, ...(Array.isArray(priceSlugs) ? priceSlugs : [])].filter(
+      (slug, index, arr): slug is string => typeof slug === 'string' && slug.length > 0 && arr.indexOf(slug) === index
+    );
 
-    if (!priceSlug || !successUrl || !cancelUrl) {
-      return res.status(400).json({ error: 'priceSlug, successUrl, cancelUrl required' });
+    console.log(`[Checkout] Request for customer: ${userId}, prices: ${candidates.join(', ')}`);
+
+    if (!candidates.length || !successUrl || !cancelUrl) {
+      return res.status(400).json({ error: 'priceSlug (or priceSlugs), successUrl, cancelUrl required' });
     }
 
     const fgClient = flowglad(userId);
@@ -28,13 +35,42 @@ checkoutRouter.post('/', async (req, res) => {
 
     // Step 2: Create checkout session
     console.log('[Checkout] Creating checkout session...');
-    const result = await fgClient.createCheckoutSession({
-      priceSlug,
-      successUrl,
-      cancelUrl,
-    });
+    let result: unknown;
+    let selectedPriceSlug: string | null = null;
+    let lastError: unknown = null;
+    for (const candidate of candidates) {
+      try {
+        result = await fgClient.createCheckoutSession({
+          priceSlug: candidate,
+          successUrl,
+          cancelUrl,
+          outputName,
+          outputMetadata,
+        });
+        selectedPriceSlug = candidate;
+        break;
+      } catch (error) {
+        lastError = error;
+        const message =
+          typeof error === 'object' && error && 'message' in error
+            ? String((error as { message?: unknown }).message ?? '')
+            : '';
+        if (!message.toLowerCase().includes('not found')) {
+          throw error;
+        }
+      }
+    }
 
-    console.log('[Checkout] Success:', JSON.stringify(result, null, 2));
+    if (!selectedPriceSlug) {
+      const fallbackMessage = `Unable to create checkout session. Tried price slugs: ${candidates.join(', ')}`;
+      if (lastError && typeof lastError === 'object') {
+        const message = 'message' in lastError ? String((lastError as { message?: unknown }).message ?? '') : '';
+        throw new Error(message ? `${fallbackMessage}. Last error: ${message}` : fallbackMessage);
+      }
+      throw new Error(fallbackMessage);
+    }
+
+    console.log(`[Checkout] Success with priceSlug="${selectedPriceSlug}"`, JSON.stringify(result, null, 2));
     const topLevelUrl =
       typeof result === 'object' && result && 'url' in result
         ? (result as { url?: unknown }).url

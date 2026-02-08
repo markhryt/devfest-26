@@ -11,7 +11,12 @@ entitlementsRouter.get('/', async (req, res) => {
     const billing = await flowglad(userId).getBilling();
     const access: Record<string, boolean> = {};
     for (const block of BLOCK_DEFINITIONS) {
-      access[block.featureSlug] = billing.checkFeatureAccess(block.featureSlug);
+      const byFeature = billing.checkFeatureAccess(block.featureSlug);
+      const byProduct =
+        'hasPurchased' in billing && typeof billing.hasPurchased === 'function'
+          ? billing.hasPurchased(block.featureSlug)
+          : false;
+      access[block.featureSlug] = byFeature || byProduct;
     }
     res.json({ entitlements: access, billing: { subscriptions: billing.subscriptions } });
   } catch (e) {

@@ -18,10 +18,18 @@ export interface BlockDefinition {
   featureSlug: string;
   /** Flowglad price slug for checkout (usage or subscription) */
   priceSlug: string;
+  /** Optional fallback price slugs (tried in order after priceSlug) */
+  checkoutPriceSlugs?: string[];
   /** Flowglad usage meter slug for usage-based billing */
   usageMeterSlug?: string;
   /** Whether block uses Claude/GPT (true) or backend-only (false) */
   usesAI: boolean;
+  /** Optional checkout metadata resolved from Flowglad pricing model */
+  priceName?: string | null;
+  /** Price per unit in smallest currency unit (e.g. cents) */
+  priceUnitAmount?: number;
+  priceCurrency?: string;
+  priceType?: 'single_payment' | 'subscription' | 'usage';
   inputs: { key: string; label: string; type: 'text' | 'file'; required?: boolean }[];
   outputs: { key: string; label: string }[];
 }
@@ -34,7 +42,8 @@ export const BLOCK_DEFINITIONS: BlockDefinition[] = [
     icon: 'Brain',
     featureSlug: 'summarize_text',
     priceSlug: 'summarize_text',
-    usageMeterSlug: undefined,
+    checkoutPriceSlugs: ['dummy5'],
+    usageMeterSlug: 'summarize_text_runs',
     usesAI: true,
     inputs: [{ key: 'text', label: 'Text to summarize', type: 'text', required: true }],
     outputs: [{ key: 'summary', label: 'Summary' }],
@@ -46,7 +55,8 @@ export const BLOCK_DEFINITIONS: BlockDefinition[] = [
     icon: 'Mail',
     featureSlug: 'extract_emails',
     priceSlug: 'extract_emails',
-    usageMeterSlug: undefined,
+    checkoutPriceSlugs: ['dummy5'],
+    usageMeterSlug: 'extract_emails_runs',
     usesAI: true,
     inputs: [{ key: 'text', label: 'Text to scan', type: 'text', required: true }],
     outputs: [{ key: 'emails', label: 'Extracted emails' }],
@@ -58,7 +68,8 @@ export const BLOCK_DEFINITIONS: BlockDefinition[] = [
     icon: 'PenLine',
     featureSlug: 'rewrite_prompt',
     priceSlug: 'rewrite_prompt',
-    usageMeterSlug: undefined,
+    checkoutPriceSlugs: ['dummy5'],
+    usageMeterSlug: 'rewrite_prompt_runs',
     usesAI: true,
     inputs: [{ key: 'text', label: 'Input to rewrite', type: 'text', required: true }],
     outputs: [{ key: 'rewritten', label: 'Rewritten text' }],
@@ -70,7 +81,8 @@ export const BLOCK_DEFINITIONS: BlockDefinition[] = [
     icon: 'TestTube',
     featureSlug: 'classify_input',
     priceSlug: 'classify_input',
-    usageMeterSlug: undefined,
+    checkoutPriceSlugs: ['dummy5'],
+    usageMeterSlug: 'classify_input_runs',
     usesAI: true,
     inputs: [{ key: 'text', label: 'Text to classify', type: 'text', required: true }],
     outputs: [{ key: 'label', label: 'Sentiment' }, { key: 'confidence', label: 'Confidence' }],
@@ -82,6 +94,7 @@ export const BLOCK_DEFINITIONS: BlockDefinition[] = [
     icon: 'FileStack',
     featureSlug: 'merge_pdfs',
     priceSlug: 'merge_pdfs',
+    checkoutPriceSlugs: ['dummy5'],
     usesAI: false,
     inputs: [
       { key: 'files', label: 'PDF files', type: 'file', required: true },

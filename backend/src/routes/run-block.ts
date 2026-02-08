@@ -24,7 +24,11 @@ runBlockRouter.post('/', async (req, res) => {
     if (!DEMO_MODE) {
       const userId = await getCustomerExternalId(req);
       const billing = await flowglad(userId).getBilling();
-      const hasAccess = billing.checkFeatureAccess(block.featureSlug);
+      const hasAccess =
+        billing.checkFeatureAccess(block.featureSlug) ||
+        ('hasPurchased' in billing && typeof billing.hasPurchased === 'function'
+          ? billing.hasPurchased(block.featureSlug)
+          : false);
       if (!hasAccess) {
         return res.status(403).json({
           error: 'Block locked',

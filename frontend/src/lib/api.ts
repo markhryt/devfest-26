@@ -85,8 +85,11 @@ export async function getEntitlementsData(): Promise<EntitlementsResponse> {
 
 export async function createCheckoutSession(params: {
   priceSlug: string;
+  priceSlugs?: string[];
   successUrl: string;
   cancelUrl: string;
+  outputName?: string;
+  outputMetadata?: Record<string, string | number | boolean>;
 }): Promise<CheckoutResponse['checkoutSession']> {
   const data = await apiRequest<CheckoutResponse>('/api/checkout', {
     method: 'POST',
